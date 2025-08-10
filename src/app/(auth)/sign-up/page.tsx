@@ -25,30 +25,31 @@ import { Checkbox } from '@/components/ui/checkbox';
 import Link from 'next/link';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
-import { GoogleButton } from '../_components/google-button/google-button';
-import { FacebookButton } from '../_components/facebook-button/facebook-button';
+import { GoogleButton, FacebookButton } from '../_components';
 
-const formSchema = z.object({
-  fullName: z.string().min(2, {
-    message: 'Full name must be at least 2 characters.',
-  }),
-  email: z.string().email({
-    message: 'Please enter a valid email address.',
-  }),
-  phoneNumber: z.string().min(10, {
-    message: 'Phone number must be at least 10 digits.',
-  }),
-  password: z.string().min(8, {
-    message: 'Password must be at least 8 characters.',
-  }),
-  confirmPassword: z.string(),
-  terms: z.boolean().refine((val) => val === true, {
-    message: 'You must agree to the terms and privacy policy.',
-  }),
-}).refine((data) => data.password === data.confirmPassword, {
-  message: "Passwords don't match",
-  path: ["confirmPassword"],
-});
+const formSchema = z
+  .object({
+    fullName: z.string().min(2, {
+      message: 'Full name must be at least 2 characters.',
+    }),
+    email: z.string().email({
+      message: 'Please enter a valid email address.',
+    }),
+    phoneNumber: z.string().min(10, {
+      message: 'Phone number must be at least 10 digits.',
+    }),
+    password: z.string().min(8, {
+      message: 'Password must be at least 8 characters.',
+    }),
+    confirmPassword: z.string(),
+    terms: z.boolean().refine((val) => val === true, {
+      message: 'You must agree to the terms and privacy policy.',
+    }),
+  })
+  .refine((data) => data.password === data.confirmPassword, {
+    message: "Passwords don't match",
+    path: ['confirmPassword'],
+  });
 
 export default function Register() {
   const router = useRouter();

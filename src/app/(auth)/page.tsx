@@ -24,8 +24,7 @@ import { Input } from '@/components/ui/input';
 import { Checkbox } from '@/components/ui/checkbox';
 import Link from 'next/link';
 import Image from 'next/image';
-import { GoogleButton } from './_components/google-button/google-button';
-import { FacebookButton } from './_components/facebook-button/facebook-button';
+import { GoogleButton, FacebookButton } from './_components';
 
 const formSchema = z.object({
   email: z.string().email({
@@ -166,10 +165,7 @@ export default function Login() {
         <div className="mt-4">
           <p className="text-sm text-gray-500 text-center">
             Don&apos;t have an account?{' '}
-            <Link
-              href="/sign-up"
-              className="text-[#C56D1A] hover:no-underline"
-            >
+            <Link href="/sign-up" className="text-[#C56D1A] hover:no-underline">
               Sign up
             </Link>
           </p>
