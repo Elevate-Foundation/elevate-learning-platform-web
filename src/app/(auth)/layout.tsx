@@ -1,4 +1,11 @@
 import type { Metadata } from 'next';
+import { Suspense } from 'react';
+import {
+  Card,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card';
+import Image from 'next/image';
 
 export const metadata: Metadata = {
   title: 'Create Next App',
@@ -12,7 +19,26 @@ export default function RootLayout({
 }>) {
   return (
     <main className="flex min-h-screen flex-col items-center justify-center p-8">
-      <div className="max-w-lg w-full">{children}</div>
+      <div className="max-w-lg w-full">
+        <Suspense
+          fallback={
+            <Card className="w-full shadow-none border-0 gap-0 py-0">
+              <CardHeader className="text-center mb-8 px-0">
+                <Image
+                  src="/brand/logo.svg"
+                  alt="Brand Logo"
+                  width={150}
+                  height={50}
+                  className="mx-auto mb-4"
+                />
+                <CardTitle className="text-2xl">Loading...</CardTitle>
+              </CardHeader>
+            </Card>
+          }
+        >
+          {children}
+        </Suspense>
+      </div>
     </main>
   );
 }
