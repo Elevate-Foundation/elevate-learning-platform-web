@@ -201,7 +201,7 @@ export default function Register() {
               />
             </div>
             <Button type="submit" className="w-full mt-5">
-              Create account
+              Get started
             </Button>
           </form>
         </Form>
