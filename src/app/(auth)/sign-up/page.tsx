@@ -24,32 +24,52 @@ import { Input } from '@/components/ui/input';
 import { Checkbox } from '@/components/ui/checkbox';
 import Link from 'next/link';
 import Image from 'next/image';
+import { useRouter } from 'next/navigation';
 
 const formSchema = z.object({
+  fullName: z.string().min(2, {
+    message: 'Full name must be at least 2 characters.',
+  }),
   email: z.string().email({
     message: 'Please enter a valid email address.',
   }),
-  password: z.string().min(6, {
-    message: 'Password must be at least 6 characters.',
+  phoneNumber: z.string().min(10, {
+    message: 'Phone number must be at least 10 digits.',
   }),
+  password: z.string().min(8, {
+    message: 'Password must be at least 8 characters.',
+  }),
+  confirmPassword: z.string(),
   terms: z.boolean().refine((val) => val === true, {
     message: 'You must agree to the terms and privacy policy.',
   }),
+}).refine((data) => data.password === data.confirmPassword, {
+  message: "Passwords don't match",
+  path: ["confirmPassword"],
 });
 
-export default function Login() {
+export default function Register() {
+  const router = useRouter();
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
+      fullName: '',
       email: '',
+      phoneNumber: '',
       password: '',
+      confirmPassword: '',
       terms: false,
     },
   });
 
   function onSubmit(values: z.infer<typeof formSchema>) {
     console.log(values);
+    // Simulate API call
+    setTimeout(() => {
+      router.push('/auth');
+    }, 1000);
   }
+
   return (
     <Card className="w-full shadow-none border-0 gap-0 py-0">
       <CardHeader className="text-center mb-8 px-0">
@@ -60,13 +80,30 @@ export default function Login() {
           height={50}
           className="mx-auto mb-4"
         />
-        <CardTitle className="text-2xl">Welcome back!</CardTitle>
-        <CardDescription>Login into your account</CardDescription>
+        <CardTitle className="text-2xl">Sign up and start learning</CardTitle>
+        <CardDescription>Create an account</CardDescription>
       </CardHeader>
       <CardContent className="px-0">
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)}>
             <div className="flex flex-col gap-6">
+              <FormField
+                control={form.control}
+                name="fullName"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Full name</FormLabel>
+                    <FormControl>
+                      <Input
+                        type="text"
+                        placeholder="Enter your full name"
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
               <FormField
                 control={form.control}
                 name="email"
@@ -86,34 +123,55 @@ export default function Login() {
               />
               <FormField
                 control={form.control}
-                name="password"
+                name="phoneNumber"
                 render={({ field }) => (
                   <FormItem>
-                    <div className="flex items-center">
-                      <FormLabel>Password</FormLabel>
-                    </div>
+                    <FormLabel>Phone number</FormLabel>
                     <FormControl>
                       <Input
-                        type="password"
-                        placeholder="**********"
+                        type="tel"
+                        placeholder="Enter your phone number"
                         {...field}
                       />
                     </FormControl>
                     <FormMessage />
-                    <div className="flex justify-end">
-                      <Link
-                        href="/forgot-password"
-                        className="ml-auto inline-block text-sm underline-offset-4 hover:underline text-[#C56D1A]"
-                      >
-                        Forgot your password?
-                      </Link>
-                    </div>
                   </FormItem>
                 )}
               />
-              <Button type="submit" className="w-full">
-                Login
-              </Button>
+              <FormField
+                control={form.control}
+                name="password"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Password</FormLabel>
+                    <FormControl>
+                      <Input
+                        type="password"
+                        placeholder="Create a password"
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="confirmPassword"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Confirm password</FormLabel>
+                    <FormControl>
+                      <Input
+                        type="password"
+                        placeholder="Confirm your password"
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
               <FormField
                 control={form.control}
                 name="terms"
@@ -127,7 +185,7 @@ export default function Login() {
                     </FormControl>
                     <div className="space-y-1 leading-none">
                       <FormLabel className="text-[13px] text-gray-600 flex flex-wrap">
-                        By signing in you agree to Elevate&apos;s{' '}
+                        By signing up you agree to Elevate&apos;s{' '}
                         <Link href="#" className="underline hover:no-underline">
                           Terms of Service
                         </Link>{' '}
@@ -142,6 +200,9 @@ export default function Login() {
                 )}
               />
             </div>
+            <Button type="submit" className="w-full mt-5">
+              Create account
+            </Button>
           </form>
         </Form>
         <div className="relative my-6">
@@ -152,7 +213,7 @@ export default function Login() {
             <div className="w-full border-t"></div>
           </div>
           <div className="relative flex justify-center text-sm/6 font-medium">
-            <span className="bg-white px-6 text-gray-900">or sign in with</span>
+            <span className="bg-white px-6 text-gray-900">or sign up with</span>
           </div>
         </div>
       </CardContent>
@@ -176,7 +237,7 @@ export default function Login() {
               d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"
             />
           </svg>
-          Sign in with Google
+          Sign up with Google
         </Button>
         <Button variant="outline" className="w-full">
           <svg className="mr-2 h-4 w-4" viewBox="0 0 24 24">
@@ -185,16 +246,13 @@ export default function Login() {
               d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"
             />
           </svg>
-          Sign in with Facebook
+          Sign up with Facebook
         </Button>
         <div className="mt-4">
           <p className="text-sm text-gray-500 text-center">
-            Don&apos;t have an account?{' '}
-            <Link
-              href="/sign-up"
-              className="text-[#C56D1A] hover:no-underline"
-            >
-              Sign up
+            Already have an account?{' '}
+            <Link href="/" className="text-primary hover:underline">
+              Sign in
             </Link>
           </p>
         </div>
