@@ -102,7 +102,7 @@ export default function Login() {
                     <FormMessage />
                     <div className="flex justify-end">
                       <Link
-                        href="#"
+                        href="/forgot-password"
                         className="ml-auto inline-block text-sm underline-offset-4 hover:underline text-[#C56D1A]"
                       >
                         Forgot your password?

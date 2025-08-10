@@ -12,7 +12,7 @@ export default function RootLayout({
 }>) {
   return (
     <main className="flex min-h-screen flex-col items-center justify-center p-8">
-      <div className="max-w-xl">{children}</div>
+      <div className="max-w-lg w-full">{children}</div>
     </main>
   );
 }
